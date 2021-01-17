@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
@@ -42,7 +43,8 @@ func main() {
 	for _, k := range ks {
 		vt, err := rdbT.Get(ctx, k).Result()
 		if err != nil {
-			log.Fatal(err)
+			log.Println("cannot get key", k, err)
+			continue
 		}
 
 		var t melonade.Task
@@ -52,8 +54,8 @@ func main() {
 		}
 
 		if t.TaskName == *tn && t.Status == melonade.TaskStatusScheduled {
-			fmt.Println(t.TransactionID, t.WorkflowID, t.TaskID)
-			fmt.Print("Press 'Y' to continue, n to skip")
+			fmt.Println(t.TransactionID, t.WorkflowID, t.TaskID, time.Unix(0, t.StartTime*int64(time.Millisecond)).Format(time.RFC3339))
+			fmt.Println("Press 'Y' to continue, n to skip")
 			b, _ := bufio.NewReader(os.Stdin).ReadByte()
 			if !(b == 'y' || b == 'Y') {
 				fmt.Println("Skipped")
