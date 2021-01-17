@@ -5,5 +5,6 @@
     go run main.go \
     --redis=redis-host:6379 \
     --ns=production \
-    --melonade=http://melonade.xxx.io/api/process-manager // <- front end proxy
+    --tn=tms_create_trip \ 
+    --melonade=http://melonade.xxx.io/api/process-manager
 ```
